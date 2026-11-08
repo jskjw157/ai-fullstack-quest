@@ -12,5 +12,8 @@ AGY(Gemini 3.8 Flash / high)가 만드는 UI·UX 명세를 이 디렉터리에 �
 권장 파일명: `docs/design/<feature>.md`
 
 AGY는 별도 worktree에서 작업하고, 구현 코드는 별도 승인 전에는 이 디렉터리에 만들지 않습니다.
-구현은 Amp low가 `amp/<slug>` 브랜치에서 담당하고, DB·인증·AI 외부 호출·배포 변경은 구현 전에
-Amp medium 설계 리뷰를 거칩니다.
+구현은 T3 Codex(`gpt-6.1-sol` / `reasoningEffort=high`)가 `impl/<slug>` 브랜치에서 담당하고,
+DB·인증·AI 외부 호출·배포 변경은 구현 전에 T3 OpenCode
+(`opencode-go/deepseek-v4.1-flash` / `variant=max`)의 독립 설계 리뷰를 거칩니다. 역할별 정확한
+설정과 handoff 규칙은 [docs/roles.md](../roles.md)와 [docs/agent-workflow.md](../agent-workflow.md)를
+따릅니다.
