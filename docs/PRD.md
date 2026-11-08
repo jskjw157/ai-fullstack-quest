@@ -407,12 +407,14 @@ T3 OpenCode에서 저장된 인증은 OpenCode Go만 확인했다. 다른 모델
 | 구현 | `Implementation role — OpenCode DeepSeek V4.1 Flash max` | `opencode` / `opencode-go/deepseek-v4.1-flash` / `variant=max` | completed, approval-required |
 | 리뷰 | `Review role — Codex GPT-6.1 Sol high` | `codex` / `gpt-6.1-sol` / `reasoningEffort=high` | completed, approval-required |
 
-- 기존 스모크 스레드의 **제목만** 현재 역할로 변경했다. 모델/option·세션 ID·과거 메시지는
-  보존했고 새 T3 스레드는 만들지 않았다.
+- 기존 스모크 스레드의 **제목만** 현재 역할로 변경하고, 각 세션에 파일·도구를 쓰지 않는 **역할
+  준비 메시지**를 한 번 보냈다. 모델/option·세션 ID·과거 메시지는 보존했고 새 T3 스레드는 만들지
+  않았다. 응답은 AGY `role-ready: ui-ux`, OpenCode `role-ready: implementation`, Codex
+  `role-ready: review`였다.
 - `t3_thread_configure` readback으로 세션의 model selection이 위 표와 동일함을 확인했다.
 - 과거 `codex-ok`/`opencode-ok` 응답은 **모델 capability 스모크**이며, 현재 매핑의 실제 구현·리뷰
   수행 증거가 아니다. T3 0.1.5에는 기존 스레드의 system/role prompt를 편집하는 API/UI가 확인되지
-  않아, 역할 프롬프트는 다음 작업 메시지로 적용한다. 템플릿은 [역할·모델 설정](./roles.md) 9장에 있다.
+  않아, 역할 프롬프트는 작업 메시지로 적용했다. 템플릿은 [역할·모델 설정](./roles.md) 9장에 있다.
 - 프로젝트 기본 모델은 여전히 `null`이다. 이번 작업에서 인증·전역 모델·권한·서비스를 변경하거나
   재시작하지 않았다.
 - 실제 구현·리뷰·디자인 산출물·P1 수정·게임 구현·배포는 시작하지 않았다.

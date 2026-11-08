@@ -82,10 +82,11 @@ T3 CLI의 `t3 thread start`는 `--provider`/`--model`/`--worktree`를 지원하�
 - `Review role — Codex GPT-6.1 Sol high` — `codex-ok` 스모크 완료, 실제 rollout
   `model=gpt-6.1-sol`, `effort=high`
 
-이 세션들은 기존 스모크 세션의 **제목만 현재 역할로 바꾼 것**입니다. 모델/option·세션 ID·과거
-메시지는 보존되어 있고, 과거 메시지는 역할 작업이 아니라 capability 스모크입니다. 실제 작업은
-`docs/roles.md` 9장의 역할별 요청 프롬프트로 시작합니다. 스모크 worktree/branch는 검증 이력이므로
-삭제하지 않습니다.
+이 세션들은 기존 스모크 세션의 **제목만 현재 역할로 바꾼 뒤 역할 준비 메시지를 한 번 보낸**
+것입니다. 모델/option·세션 ID·과거 메시지는 보존되어 있고, 과거 메시지는 역할 작업이 아니라
+capability 스모크입니다. 역할 준비 응답은 AGY `role-ready: ui-ux`, OpenCode
+`role-ready: implementation`, Codex `role-ready: review`였습니다. 실제 작업은 `docs/roles.md` 9장의
+역할별 요청 프롬프트로 시작합니다. 스모크 worktree/branch는 검증 이력이므로 삭제하지 않습니다.
 
 ### 프로젝트 기본 모델
 

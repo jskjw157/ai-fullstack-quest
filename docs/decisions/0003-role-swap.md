@@ -25,8 +25,8 @@ T3에는 native orchestration/subagent primitive가 있지만, 설치된 v0.1.5�
 1. **구현:** T3 `opencode` / `opencode-go/deepseek-v4.1-flash` / `variant=max`.
 2. **독립 리뷰:** T3 `codex` / `gpt-6.1-sol` / `reasoningEffort=high`.
 3. AGY UI·UX와 Puck 설계 역할은 유지한다.
-4. 기존 T3 스모크 스레드의 **제목만** 현재 역할로 바꾼다. 모델/option·세션 ID·과거 메시지는
-   보존한다. 새 T3 스레드를 만들지 않는다.
+4. 기존 T3 스모크 스레드의 **제목만** 현재 역할로 바꾸고, 파일·도구를 쓰지 않는 역할 준비
+   메시지를 한 번 보낸다. 모델/option·세션 ID·과거 메시지는 보존한다. 새 T3 스레드를 만들지 않는다.
 5. 저장소 문서의 역할 표·프리셋·handoff·프롬프트 템플릿을 현재 역할로 바꾼다.
 6. 기존 Codex 구현·OpenCode 리뷰와 Amp low/medium은 이력으로만 남긴다.
 7. T3 native orchestration primitive(`delegate_task` 등)는 **조사·문서화만** 한다. 현재 프로젝트에
@@ -39,6 +39,8 @@ T3에는 native orchestration/subagent primitive가 있지만, 설치된 v0.1.5�
   `Review role — Codex GPT-6.1 Sol high`. AGY 세션은 그대로다.
 - `t3_thread_configure` readback으로 모델/option이 유지됨을 확인했다. 세션은 모두
   `approval-required`다.
+- 역할 준비 메시지에 AGY `role-ready: ui-ux`, OpenCode `role-ready: implementation`, Codex
+  `role-ready: review`로 응답했다. 파일·도구는 사용하지 않았다.
 - 실제 구현·리뷰 작업은 아직 시작하지 않았다. 기존 `codex-ok`/`opencode-ok`는 역할 작업이 아니라
   capability 스모크다.
 - T3 native subagent/orchestration은 **부분 가능**이지만, 고정된 stage·artifact 자동 전달·자동

@@ -227,8 +227,10 @@ T3의 native provider가 되었다는 뜻은 아닙니다.** T3 화면에서 Amp
 - AGY 스모크: `UI/UX role — AGY Gemini 3.8 Flash high`가 `gemini-3.8-flash / high`로 응답. live
   capability 기본값 high와 캐시 현재값 high를 확인했으나, provider log가 option 값을 redact해
   wire-level 증명은 없음.
-- 역할 세션 제목은 기존 스모크 스레드에서 **제목만** 변경했고, 모델/option·세션 ID·과거 메시지는
-  보존. `t3_thread_configure` readback으로 세 모델 선택을 재확인.
+- 역할 세션 제목은 기존 스모크 스레드에서 **제목만** 변경했고, 각 세션에 파일·도구를 쓰지 않는
+  역할 준비 메시지를 보내 AGY `role-ready: ui-ux`, OpenCode `role-ready: implementation`, Codex
+  `role-ready: review` 응답을 받음. 모델/option·세션 ID·과거 메시지는 보존.
+- `t3_thread_configure` readback으로 세 모델 선택을 재확인.
 - T3 프로젝트 `defaultModelSelection`은 `null`; MCP outside-agent의 변경 시도는 full-access 호출
   스레드/클라이언트가 필요하다는 오류로 거부됨. 역할 세션은 각자 명시 선택을 사용.
 - 역할 세션은 T3 `approval-required` runtime mode이며, 파일 수정·명령 실행에 승인이 필요할 수 있음.

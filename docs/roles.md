@@ -70,11 +70,19 @@ model selection을 넘깁니다. **모델명이나 프롬프트에 `high`/`max`�
 | 구현 | `Implementation role — OpenCode DeepSeek V4.1 Flash max` | `opencode-ok` |
 | 리뷰 | `Review role — Codex GPT-6.1 Sol high` | `codex-ok` |
 
-이 세션들은 **기존 스모크 세션의 제목만 현재 역할로 바꾼 것**입니다. 모델·option과 세션 ID는
-그대로이고, 과거 smoke 프롬프트·응답은 삭제하지 않고 이력으로 보존했습니다. T3 0.1.5에서 기존
-스레드의 system/role prompt를 직접 편집하는 API/UI는 확인하지 못했으므로, 역할 프롬프트는 다음
-작업 메시지로 적용합니다. 현재 세션의 과거 메시지는 “역할별 실제 작업 프롬프트”가 아니라 모델
-capability 스모크입니다. 실제 역할 작업은 아래 프롬프트로 새 작업을 시작합니다.
+이 세션들은 **기존 스모크 세션의 제목만 현재 역할로 바꾼 뒤, 역할 준비 메시지를 한 번씩 보낸**
+것입니다. 모델·option과 세션 ID는 그대로이고, 과거 smoke 프롬프트·응답은 삭제하지 않고 이력으로
+보존했습니다. T3 0.1.5에서 기존 스레드의 system/role prompt를 직접 편집하는 API/UI는 확인하지
+못했으므로, 역할 지시는 **작업 메시지**로 적용했습니다. 모델 호출만 한 role setup이며 파일 읽기/
+수정·도구 실행은 하지 않았습니다.
+
+- AGY 응답: `role-ready: ui-ux`
+- OpenCode 응답: `role-ready: implementation`
+- Codex 응답: `role-ready: review`
+
+현재 세션의 과거 메시지는 “역할별 실제 작업 프롬프트”가 아니라 모델 capability 스모크이며, 새 role
+setup 메시지가 그 뒤에 이력으로 남아 있습니다. 실제 역할 작업은 아래 프롬프트로 새 작업을
+시작합니다.
 
 T3 접근은 T3 Connect의 `app.t3.codes`에서 이 환경의 `AI Fullstack Quest` 프로젝트를 여는 방식입니다.
 프로젝트 경로는 `~/projects/ai-fullstack-quest`입니다. T3 화면의 스레드 목록에서 위 제목을 찾습니다.
