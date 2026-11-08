@@ -1,0 +1,11 @@
+node_modules/
+dist/
+data/
+coverage/
+.worktrees/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.amp/in/
