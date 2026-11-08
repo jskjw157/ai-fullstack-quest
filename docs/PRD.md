@@ -1,8 +1,9 @@
 # AI Fullstack Quest — PRD v0.1
 
-> **출처:** Puck이 작성한 PRD v0.1 아티팩트(artifact `af98b560-0085-4d15-8a91-554043e4217b`, revision 5, 2026-11-08)를 저장소에 보관한 문서입니다. 공개 저장소에 맞게 내부 경로·호스트명을 일반화했고, 14·15장의 낡은 Amp/medium 문구는 현재 역할에 맞게 정리했으며, 16~18장의 과거 실행·리뷰 기록은 이력으로 보존했습니다.
+> **출처:** Puck이 작성한 PRD v0.1 아티팩트(artifact `af98b560-0085-4d15-8a91-554043e4217b`, revision 7, 2026-11-08)를 저장소에 보관한 문서입니다. 공개 저장소에 맞게 내부 경로·호스트명을 일반화했고, 14·15장의 낡은 Amp/medium 문구는 현재 역할에 맞게 정리했으며, 16~19장의 과거 실행·리뷰·역할 기록은 이력으로 보존했습니다.
 > **읽는 법:** 3장의 **“사용자와 합의한 사항”만 확정**입니다. **“이 PRD의 제안 기본값”**, 6~7장의 수치·콘텐츠량, 15장의 미결 항목은 제안이며 해당 구현 전에 확정합니다.
-> **현재 역할:** 11장의 역할 분담이 현재 적용 대상입니다. 16~17장의 Amp low/medium 기록은 최초 기반 작업의 이력이며 현재 구현·리뷰 실행기가 아닙니다. 실제 T3 설정·검증은 [역할·모델 설정](./roles.md)에 기록했습니다.
+> **현재 역할:** 11장의 역할 분담이 현재 적용 대상입니다. **OpenCode 구현, Codex 독립 리뷰**이며, 16~19장의 Amp/이전 Codex 구현·OpenCode 리뷰 기록은 이력입니다. 실제 T3 설정·검증은 [역할·모델 설정](./roles.md)에 기록했습니다.
+> **오케스트레이션:** T3 native primitive 조사 결과와 현재 프로젝트의 자동 pipeline 부재는 [T3 오케스트레이션](./t3-orchestration.md) 및 21장에 기록했습니다.
 > **승인 범위:** 14장의 **1단계(개발 기반)**만 현재 승인 범위입니다. 이 문서는 전체 게임 구현·공개 배포를 승인하지 않습니다.
 > **현재 scaffold:** React + TypeScript + Vite, Hono + `node:sqlite` 구성은 개발 기반용 잠정 구현입니다. PRD 10장의 최종 백엔드·DB 결정을 자동 대체하지 않으며, 결정 이유는 [ADR-0001](./decisions/0001-bootstrap-stack.md)에 기록했습니다.
 
@@ -36,7 +37,7 @@
 - 학습과 퀴즈 수행에 따라 캐릭터 능력치가 오른다.
 - 기존 VPS의 T3 Code를 개발 작업공간으로 사용한다.
 - GitHub 저장소는 공개로 만든다. **저장소 공개와 개인 학습 데이터·서비스 공개는 별개다.**
-- **현재 개발 역할:** 제품·기술 설계는 Puck, UI·UX는 AGY의 Gemini 3.8 Flash high, 구현은 T3 native Codex의 6.1 Sol high, 독립 검토·리뷰는 T3 native OpenCode의 DeepSeek 4.1 Flash max로 진행한다. OMO는 제외한다. 이는 사용자가 승인한 목표 구성으로, 각 모델 ID·추론 설정·인증·실행 성공 여부는 실제 T3에서 확인한 뒤 별도로 보고한다. 최초 Amp low/medium 분담은 대체됐다. 실제 설정·검증 결과와 T3 사용법은 [역할·모델 설정](./roles.md)에 기록한다.
+- **현재 개발 역할(사용자 교체 요청 반영):** 제품·기술 설계는 Puck, UI·UX는 AGY의 Gemini 3.8 Flash high, **구현은 T3 native OpenCode의 DeepSeek 4.1 Flash max, 독립 검토·리뷰는 T3 native Codex의 6.1 Sol high**로 진행한다. OMO는 제외한다. 모델·effort는 유지하고 Codex/OpenCode 역할만 바꾼다. T3 세션·저장소 가이드의 실제 변경 결과는 20장, 오케스트레이션 조사는 21장에 기록한다. 최초 Amp low/medium 분담은 대체됐다. 실제 설정·검증 결과와 T3 사용법은 [역할·모델 설정](./roles.md)에 기록한다.
 
 ### 이 PRD의 제안 기본값
 
@@ -209,20 +210,20 @@ AI 생성 문제는 검토 대기 상태로 저장하고 바로 검증된 문제
 
 ## 11. 개발 역할과 전달 규칙
 
-**현재 승인된 목표 구성이다. 설정 완료나 자동 오케스트레이션 완료를 뜻하지 않는다.** 최초 Amp low/medium 분담을 대체하고 T3 native provider를 사용한다.
+**현재 승인된 역할 구성이다. 사용자가 Codex와 OpenCode 역할 교체를 요청해 아래 표를 갱신했다. 19절은 교체 전 설정·스모크 이력이다.** T3 자체의 오케스트레이션 기능과 현재 프로젝트의 자동 역할 전달은 구분해서 조사한다. 최초 Amp low/medium 분담을 대체하고 T3 native provider를 사용한다.
 
 | 단계 | 담당 | 전달할 내용 |
 | --- | --- | --- |
 | 제품·기술 설계 | Puck | PRD, 기능 우선순위, 데이터 흐름, API 계약, 인수 조건 |
 | UI·UX | AGY / Gemini 3.8 Flash / high | 사용자 흐름, 컴포넌트, 토큰, 반응형·상태별 명세 |
-| 구현 | T3 Codex / 6.1 Sol / high | 작은 기능 단위 코드와 테스트·실행 결과 |
-| 독립 검토·리뷰 | T3 OpenCode / DeepSeek 4.1 Flash / max | 설계 준수·정확성·보안·회귀·누락 검토 |
+| 구현 | T3 OpenCode / DeepSeek 4.1 Flash / max | 작은 기능 단위 코드와 테스트·실행 결과 |
+| 독립 검토·리뷰 | T3 Codex / 6.1 Sol / high | 설계 준수·정확성·보안·회귀·누락 검토 |
 
 - 실제 제공자 capability와 응답 메타데이터로 모델·추론 설정을 검증한다. 이름이 비슷한 모델이나 다른 effort로 조용히 대체하지 않는다.
-- Codex 구현과 OpenCode 리뷰는 세션·역할을 분리한다. 리뷰어는 요청 없이 구현 파일을 수정하지 않는다.
-- DB 구조·인증·AI 외부 호출처럼 수정 비용이 큰 설계는 구현 전에 OpenCode 검토를 거친다.
+- OpenCode 구현과 Codex 리뷰는 세션·역할을 분리한다. 리뷰어는 요청 없이 구현 파일을 수정하지 않는다.
+- DB 구조·인증·AI 외부 호출처럼 수정 비용이 큰 설계는 구현 전에 Codex 검토를 거친다.
 - 동일 체크아웃을 여러 에이전트가 동시에 편집하지 않는다. 병렬 작업은 별도 작업공간으로 격리한다.
-- 에이전트는 설계 문서·변경 코드·테스트 결과로 작업을 넘긴다. UI에서 세션을 생성할 수 있는 것과 세션 간 자동 전달이 되는 것을 구분한다.
+- 에이전트는 설계 문서·변경 코드·테스트 결과로 작업을 넘긴다. UI에서 세션을 생성할 수 있는 것과 세션 간 자동 전달이 되는 것을 구분한다. T3 native subagent primitive와 사용자 정의 자동 pipeline도 구분한다.
 - 미지원 모델·추론 단계·인증·승인 권한에 막히면 사용자에게 필요한 조치를 알린다. OMO나 Amp를 대체 실행기로 자동 도입하지 않는다.
 - 이번 승인은 모델·역할 설정과 검증에 적용한다. 전체 게임 구현·배포나 기존 P1 수정의 자동 실행까지 확대하지 않는다.
 
@@ -262,12 +263,12 @@ AI 생성 문제는 검토 대기 상태로 저장하고 바로 검증된 문제
 ## 14. 실행 단계와 현재 승인 범위
 
 1. **개발 기반:** GitHub public 저장소, T3 작업공간과 native 역할 세션, 최소 실행·테스트 환경, README·PRD.
-2. **설계 구체화:** 데이터·API 계약, AGY UI·UX, OpenCode 사전 검토.
+2. **설계 구체화:** 데이터·API 계약, AGY UI·UX, Codex 사전 검토.
 3. **MVP 수직 구현:** 한 개념을 학습하고 한 문제를 풀어 성장하는 전체 흐름부터 완성.
 4. **복습·미션·운영:** 콘텐츠 확장, 데이터 복구·권한·사용성 확인.
 5. **AI 코치:** 기본 사용 경험 검증 뒤 비용·개인정보 정책을 정하고 도입.
 
-> 현재 역할은 T3 native AGY·Codex·OpenCode다. Amp는 앱 구현·리뷰 실행기가 아니며, 초기 연결 기록만 이력으로 남긴다. 역할 세션 간 전달은 현재 수동이다. 세부 설정과 검증 근거는 [역할·모델 설정](./roles.md)에 있다.
+> 현재 역할은 T3 native AGY UI·UX, OpenCode 구현, Codex 리뷰다. Amp는 앱 구현·리뷰 실행기가 아니며, 초기 연결 기록만 이력으로 남긴다. 역할 세션 간 전달은 현재 수동이며, T3 native subagent primitive는 있으나 이 프로젝트의 자동 pipeline은 아니다. 세부 설정과 검증 근거는 [역할·모델 설정](./roles.md), [T3 오케스트레이션](./t3-orchestration.md)에 있다.
 
 **현재 실행 스레드에 맡긴 구현 범위는 1단계 개발 기반이다.** 이 PRD 작성만으로 전체 게임 구현·배포·병합을 승인한 것으로 확대 해석하지 않는다. 후속 구현 단위는 준비 결과와 설계를 보고 정한다.
 
@@ -275,9 +276,9 @@ AI 생성 문제는 검토 대기 상태로 저장하고 바로 검증된 문제
 
 - 최종 이름과 시각적 테마
 - 기존 기반과 VPS 상태를 확인한 뒤 기술 스택·DB 확정
-- AGY `gemini-3.8-flash`/`thinking_level=high`, Codex `gpt-6.1-sol`/`reasoningEffort=high`, OpenCode `opencode-go/deepseek-v4.1-flash`/`variant=max`의 T3 native 실제 지원 범위와 인증
+- AGY `gemini-3.8-flash`/`thinking_level=high`, OpenCode `opencode-go/deepseek-v4.1-flash`/`variant=max`, Codex `gpt-6.1-sol`/`reasoningEffort=high`의 T3 native 실제 지원 범위와 인증
 - T3 프로젝트 기본 모델 선택(현재 권한으로 변경 불가; 사용자가 T3 UI에서 설정)
-- 역할 세션 간 자동 전달을 도입할지 여부(현재는 수동 전달)
+- 역할 세션 간 자동 전달을 도입할지 여부(현재는 수동 전달). T3 native subagent primitive를 사용할지, parent agent/외부 controller를 둘지 결정
 - 첫 학습 경로의 구체적 문제·코딩 미션
 - 제품 내부 AI를 도입할 시점, 제공자와 비용 한도
 
@@ -372,4 +373,80 @@ medium이 기존 테스트 29개와 타입 검사·빌드를 직접 재실행해
 
 T3 OpenCode에서 저장된 인증은 OpenCode Go만 확인했다. 다른 모델 구독이 자동으로 공유된다고 가정하지 않으며 추가 경로에는 별도 인증 확인이 필요하다. 인증 내용은 열거하거나 문서에 저장하지 않았다.
 
-조사 당시 임시 스모크는 종료·정리했고 운영 T3/OpenCode·인증·제공자 설정·서비스를 바꾸거나 재시작하지 않았다. **이후 사용자가 OMO 없이 T3 native 경로를 선택하고 Codex 6.1 Sol high, OpenCode DeepSeek 4.1 Flash max, 기존 AGY UI·UX 분담으로 진행하도록 승인했다.** 현재 역할은 11절에 반영했으며 실제 설정·실행 검증 결과는 [역할·모델 설정](./roles.md)에 기록한다.
+조사 당시 임시 스모크는 종료·정리했고 운영 T3/OpenCode·인증·제공자 설정·서비스를 바꾸거나 재시작하지 않았다. **이후 사용자가 OMO 없이 T3 native 경로를 선택하고 교체 전 매핑(Codex 구현·OpenCode 리뷰), AGY UI·UX, Codex 6.1 Sol high, OpenCode DeepSeek 4.1 Flash max로 진행하도록 승인했다.** 그 설정·실행 검증 결과는 19절에, 현재 역할 교체는 20절에 기록한다.
+
+## 19. T3 역할 세션 준비 결과 — 이력 (`339d3bd`)
+
+**이 절은 Codex 구현·OpenCode 리뷰였던 교체 전 이력이다. 현재 역할은 11·20절의 OpenCode 구현·Codex 리뷰다.** 설정 실행 스레드 보고와 최신 결과를 확인했다. 저장소의 역할 가이드·PRD revision 5·AGENTS·workflow·ADR-0002 등 문서 8개를 갱신해 커밋 `339d3bd`를 공개 저장소 main에 푸시했고, 앱 기능 변경은 없었다.
+
+### 모델과 추론 설정 검증 수준 (교체 전 매핑)
+
+| 역할 | 실제 선택 | 확인한 근거·제한 |
+| --- | --- | --- |
+| UI·UX | `antigravity / gemini-3.8-flash / thinking_level=high` | capability·선택·스모크 확인. 제공자 로그 마스킹으로 wire-level high 전송값은 미증명 |
+| 구현 (이력) | `codex / gpt-6.1-sol / reasoningEffort=high` | 실제 rollout의 `turn_context`에서 model·high 확인. 스모크는 read-only/untrusted로 파일 쓰기는 미검증 |
+| 독립 리뷰 (이력) | `opencode / opencode-go/deepseek-v4.1-flash / variant=max` | session·assistant metadata에서 variant=max 확인 |
+
+### T3 사용 방법과 제한 (당시)
+
+- T3 Connect의 `app.t3.codes` → **AI Fullstack Quest**에서 세 역할 세션을 사용했다.
+- 세 세션은 모두 `approval-required`이며 각자 명시적인 모델 선택을 사용했다.
+- 프로젝트 `defaultModelSelection`은 `null`이었다. MCP 권한으로 변경하지 못했으며, 필요하면 사용자가 T3 UI에서 설정한다. 일괄 full-access 권한을 부여하지 않았다.
+- **당시 준비한 프로젝트 세션 간 전달은 수동이었고 자동 pipeline은 구성하지 않았다.** 이는 T3 제품 자체에 오케스트레이션 기능이 없음을 검증했다는 뜻이 아니며, 이후 21절에서 native primitive와 pipeline 부재를 분리 조사했다.
+- OpenCode는 **OpenCode Go 경로**다. 무료 `opencode/deepseek-v4.1-flash-free`와 다르며 무료 모델 실행은 이번에 검증하지 않았다.
+- 로컬 테스트 29개, 타입 검사·빌드·링크 검사를 통과했다. 실제 UI·UX 산출물, P1 결함 수정, 앱 추가 구현, 공개 배포는 수행하지 않았다.
+
+## 20. 현재 역할 교체 실제 반영 — revision 7
+
+사용자가 **모델·effort/variant는 유지하고 Codex와 OpenCode의 역할만 교체**하도록 요청했다. 현재
+매핑은 11절과 같다.
+
+| 역할 | T3 세션 제목(현재) | 실제 model selection | 상태 |
+| --- | --- | --- | --- |
+| UI·UX | `UI/UX role — AGY Gemini 3.8 Flash high` | `antigravity` / `gemini-3.8-flash` / `thinking_level=high` | completed, approval-required |
+| 구현 | `Implementation role — OpenCode DeepSeek V4.1 Flash max` | `opencode` / `opencode-go/deepseek-v4.1-flash` / `variant=max` | completed, approval-required |
+| 리뷰 | `Review role — Codex GPT-6.1 Sol high` | `codex` / `gpt-6.1-sol` / `reasoningEffort=high` | completed, approval-required |
+
+- 기존 스모크 스레드의 **제목만** 현재 역할로 변경했다. 모델/option·세션 ID·과거 메시지는
+  보존했고 새 T3 스레드는 만들지 않았다.
+- `t3_thread_configure` readback으로 세션의 model selection이 위 표와 동일함을 확인했다.
+- 과거 `codex-ok`/`opencode-ok` 응답은 **모델 capability 스모크**이며, 현재 매핑의 실제 구현·리뷰
+  수행 증거가 아니다. T3 0.1.5에는 기존 스레드의 system/role prompt를 편집하는 API/UI가 확인되지
+  않아, 역할 프롬프트는 다음 작업 메시지로 적용한다. 템플릿은 [역할·모델 설정](./roles.md) 9장에 있다.
+- 프로젝트 기본 모델은 여전히 `null`이다. 이번 작업에서 인증·전역 모델·권한·서비스를 변경하거나
+  재시작하지 않았다.
+- 실제 구현·리뷰·디자인 산출물·P1 수정·게임 구현·배포는 시작하지 않았다.
+
+## 21. T3 오케스트레이션 조사 — native primitive와 pipeline 부재
+
+상세 근거·메뉴·도구·버전 차이는 [T3 오케스트레이션](./t3-orchestration.md)에 기록했다. 요약:
+
+| 항목 | 판정 |
+| --- | --- |
+| T3 native orchestration/subagent primitive | **가능** — V2 orchestration graph, `delegate_task`, task status/cancel, lineage/context transfer |
+| cross-provider child task | **가능** — Codex/OpenCode/Antigravity 모두 live capability에서 `canRunChildTask`·`canRunCrossProviderChildTask` true |
+| 사용자 정의 AGY → OpenCode → Codex pipeline UI | **미지원/미확인** — 설치본 v0.1.5 settings route와 v0.1.5/v0.1.7 문서에 pipeline builder 없음 |
+| 산출물·완료·실패·재검토 자동 전달 | **부분/제한** — child result/context transfer와 status는 있으나, 조건·재시도·재리뷰·merge는 controller가 구현해야 함 |
+| 승인 게이트 | **가능** — runtime mode, parent/child 권한 상한, pending approval/question. v0.1.7은 parent에서 child approval 응답을 강조 |
+| worktree 충돌 격리 | **부분/가능** — `delegate_task` live schema의 `isolation: worktree`, `t3_thread_launch`의 workspaceStrategy. 자동 merge는 없음 |
+| 외부 MCP controller | **부분 가능** — T3 MCP 밖에서 thread launch/send/wait 가능. `delegate_task`는 active parent run이 필요하다는 문서 제약 |
+| plugin/별도 script | native child delegation에는 불필요. 고정 자동 pipeline은 parent agent prompt 또는 외부 controller/script가 필요 |
+
+- 설치 버전은 **T3 Code v0.1.5**, upstream 최신은 **v0.1.7**이다. v0.1.7의 child approvals·one-time
+  schedules·shareable links는 유용한 개선이지만, 사용자 정의 multi-provider pipeline builder가
+  추가됐다는 근거는 없다. 업그레이드는 하지 않았다.
+- T3 내부의 `OrchestratorV2`/`ThreadManagementService`/`OrchestratorMcpService`는 **실행 엔진과
+  MCP ingress**이지, 사용자가 설정하는 workflow DSL이 아니다.
+- T3 UI의 thread details **Lineage**는 fork/subagent 관계를, **Automations**는 scheduled task를
+  보여준다. 공식 v0.1.5 문서는 web/desktop **Agents** view로 delegated subagent를 따라가라고
+  설명한다. 이번 조사는 메뉴를 브라우저로 클릭한 것이 아니라 installed client route/source와
+  official docs로 확인했다.
+- **이번 프로젝트의 자동 pipeline은 여전히 없다.** 자동화하려면 parent agent가 `delegate_task`를
+  순차 호출하는 custom workflow 또는 T3 MCP를 호출하는 외부 controller를 별도 설계해야 하며,
+  승인·artifact 전달·실패/재검토·worktree merge 정책이 추가로 필요하다.
+- T3 상태 DB에서 subagent/context transfer/scheduled task row가 0이고 subagent/delegated event
+  type도 없었다. 이는 현재 구성된 child task/pipeline이 없다는 운영 관측이며, 기능 부재의 증거는
+  아니다.
+- 이번 조사에서 daemon/controller 설치, T3 업그레이드, 서비스 재시작, full-access 확대, child task
+  실행 스모크는 하지 않았다. 따라서 `delegate_task`의 end-to-end 동작과 installed v0.1.5의 child
+  approval/worktree isolation UX는 **문서·live schema 근거이며 실행 검증은 아니다.**

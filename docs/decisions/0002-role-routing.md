@@ -1,8 +1,9 @@
 # ADR-0002: T3 native 역할·모델 라우팅
 
-- 상태: **Accepted (project-specific), 2026-11-08**
+- 상태: **Superseded by ADR-0003 (role mapping only; history preserved)** — 2026-11-08
 - 결정자: 사용자 승인, Puck 설계, 부트스트랩 통합 작업
-- 관련: `docs/PRD.md` 3·11·14·15장, `docs/roles.md`, `docs/agent-workflow.md`
+- 관련: `docs/PRD.md` 3·11·14·15장, `docs/roles.md`, `docs/agent-workflow.md`,
+  `docs/decisions/0003-role-swap.md`
 
 ## 맥락
 
@@ -52,3 +53,9 @@ Codex와 OpenCode는 모델·effort/variant가 실제 실행 기록에서도 확
 - DB·인증·AI 외부 호출의 최종 설계
 - 프로젝트 기본 모델의 최종값(사용자 T3 UI 결정)
 - AGY의 wire-level thinking level 독립 증명
+
+## 이력
+
+이 ADR의 **3·4번 역할 매핑**(Codex 구현, OpenCode 리뷰)은 ADR-0003에서 OpenCode 구현, Codex
+리뷰로 교체됐다. 모델·effort 선택, 수동 handoff, worktree 격리, 권한 원칙은 그대로 유지한다. 이
+문서는 교체 전 결정의 이력으로 보존하며, ADR-0003의 T3 orchestration 조사 결론을 대신하지 않는다.

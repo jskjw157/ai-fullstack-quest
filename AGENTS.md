@@ -10,9 +10,10 @@ character stats: frontend, backend, AI, and ops. The approved scope right now is
 foundation: public GitHub repository, T3 native role workspace, a minimal runnable app, and
 documentation. It is not approval for the full game, a public deployment, or P1 fixes.
 
-- PRD: `docs/PRD.md` (Puck, v0.1, artifact revision 5). Only section 3 "사용자와 합의한 사항" is
+- PRD: `docs/PRD.md` (Puck, v0.1, artifact revision 7). Only section 3 "사용자와 합의한 사항" is
   confirmed; proposed defaults and numbers need a decision before implementation.
-- Roles and exact T3 model selections: `docs/roles.md`. Role routing decision: ADR-0002.
+- Roles and exact T3 model selections: `docs/roles.md`. Current role-swap decision: ADR-0003;
+  ADR-0002 is the superseded pre-swap mapping.
 - Stack: React + TypeScript + Vite, Hono, `node:sqlite`. This is a provisional bootstrap, recorded
   in `docs/decisions/0001-bootstrap-stack.md`. Do not replace it automatically because the PRD
   leaves the final backend/DB open.
@@ -38,14 +39,14 @@ another free loopback port. Never expose the app on a public interface.
 | --- | --- | --- |
 | Product and technical design | Puck (artifact/PRD; not a T3 provider) | PRD, priorities, data flow, API contract, acceptance criteria |
 | UI/UX | T3 `antigravity` / `gemini-3.8-flash` / `thinking_level=high` | user flows, components, tokens, responsive and state specs |
-| Implementation | T3 `codex` / `gpt-6.1-sol` / `reasoningEffort=high` | small code changes with tests and execution evidence |
-| Independent review | T3 `opencode` / `opencode-go/deepseek-v4.1-flash` / `variant=max` | correctness, security, regression, missing requirements |
+| Implementation | T3 `opencode` / `opencode-go/deepseek-v4.1-flash` / `variant=max` | small code changes with tests and execution evidence |
+| Independent review | T3 `codex` / `gpt-6.1-sol` / `reasoningEffort=high` | correctness, security, regression, missing requirements |
 
 Rules:
 
 1. Keep implementation and review in separate sessions. A self-review is not an independent review.
    Never report that a review happened when only the implementer checked the change.
-2. DB schema, authentication, and external AI calls need an independent OpenCode review **before**
+2. DB schema, authentication, and external AI calls need an independent Codex review **before**
    implementation.
 3. The model ID and the effort/variant are separate settings. Verify both against live T3
    capabilities and the actual run metadata. Do not infer effort from a model label or a prompt.
@@ -56,14 +57,19 @@ Rules:
    not a handoff.
 6. This project does not use OMO. Amp is not the implementation or review executor; the historical
    Amp MCP outside-agent connection is workspace tooling only.
+7. Role mapping history is preserved in `docs/PRD.md` section 19 and `docs/roles.md`: the earlier
+   Codex-implementation/OpenCode-review mapping is superseded. Do not report old smoke results as
+   implementation or review work under the current mapping.
 
 ## Session handoff
 
 The current handoff between roles is **manual**. Puck's design, AGY's UI/UX spec, the implementation
 commit, and the review result are passed by the user or the current agent as links/files to the next
-role session. T3 exposes child-task and cross-provider child-task capability, and MCP can create or
-message threads, but no automatic design → UI/UX → implementation → review pipeline is configured.
-Do not claim that creating a T3 session makes the handoff automatic.
+role session. T3 has native orchestration primitives: `delegate_task` can create an app-owned child
+thread/run on another provider, with a role, model/options, worktree isolation option, async/wait,
+`task_status`, and `task_cancel`; threads also expose lineage and context transfer. But **no
+AGY → OpenCode → Codex pipeline is configured for this project**. Native subagent capability is not
+the same as a user-defined automatic pipeline. See `docs/t3-orchestration.md`.
 
 ## Verified provider support (2026-11-08)
 
@@ -74,10 +80,18 @@ Do not claim that creating a T3 session makes the handoff automatic.
 - T3 `codex` exposes `gpt-6.1-sol` with `reasoningEffort` low/medium/high/xhigh/max/ultra and
   `serviceTier` default/priority, no provider constraints. The smoke thread replied `codex-ok`; its
   actual rollout `turn_context` recorded `payload.model=gpt-6.1-sol` and `payload.effort=high`.
+  The smoke was read-only/untrusted; it does not prove review or write behavior.
 - T3 `opencode` exposes `opencode-go/deepseek-v4.1-flash` with `variant` low/high/max, no provider
   constraints. The smoke thread replied `opencode-ok`; its OpenCode session and assistant message
   recorded `providerID=opencode-go`, model `deepseek-v4.1-flash`, `variant=max`, with reasoning
-  tokens. `opencode/deepseek-v4.1-flash-free` is a different model ID; do not conflate them.
+  tokens. The smoke did not edit files, so implementation write access is not proven.
+  `opencode/deepseek-v4.1-flash-free` is a different model ID; do not conflate them.
+- All three role providers report `canRunChildTask=true` and
+  `canRunCrossProviderChildTask=true` in live `orchestrator_capabilities`. T3 also exposes
+  `delegate_task`, `task_status`, `task_cancel`, thread lineage/context transfer, and thread
+  launch/send/wait. These are native orchestration primitives, but they are not a configured
+  AGY → OpenCode → Codex pipeline; a parent agent or external controller must drive the sequence.
+  See `docs/t3-orchestration.md`.
 - The T3 project's `defaultModelSelection` is `null`. An update attempt was denied:
   `Changing projects or environment settings needs a live full-access/default calling thread or a
   full-access client.` The user must set a project default in the T3 UI if they want one. Role
@@ -85,6 +99,9 @@ Do not claim that creating a T3 session makes the handoff automatic.
 - T3 0.1.5 CLI `thread start` accepts `--provider`, `--model`, and `--worktree`, but no effort or
   variant flag. Use the T3 UI or an MCP `t3_thread_launch` with model selection for those options.
   No named multi-model preset feature was found in the project schema or CLI.
+- Installed T3 is v0.1.5; upstream latest is v0.1.7. The v0.1.7 notes add child approvals, one-time
+  schedules, and shareable thread links, but the documented orchestration surface remains imperative
+  `delegate_task`/thread tools, not a user-configurable pipeline builder. No upgrade was performed.
 - T3 v0.1.5 has no Amp native provider. Amp connects only through T3's MCP outside-agent bridge and
   is not an app implementation/review executor. Do not describe Amp as a T3 provider or add an
   unsupported driver.
@@ -99,6 +116,9 @@ metadata, not this file, are the source of truth.
   not for agent edits.
 - T3 role threads use T3's built-in worktree strategy (`workspaceStrategy: worktree`, base `main`).
   Use `design/`, `impl/`, and `review/` branch prefixes.
+- Native child tasks can use `delegate_task` with `isolation: worktree`; this creates a separate
+  checkout from the parent commit, but does not merge automatically. The parent must define the
+  commit/PR boundary. Do not run a child and parent as writers in one checkout.
 - One writer per worktree. A reviewer reads the same commit without editing it. Do not check out the
   same branch in two worktrees and do not let implementation and review edit one checkout at once.
 - Historical T3 smoke worktrees and branches are preserved as evidence. Create a fresh role worktree

@@ -1,9 +1,10 @@
 # ADR-0001: 부트스트랩 스택 (잠정)
 
-- 상태: **Proposed / Provisional** (역할 라우팅은 ADR-0002에서 갱신)
+- 상태: **Proposed / Provisional** (역할 라우팅은 ADR-0003에서 갱신)
 - 날짜: 2026-11-08
 - 결정자: 부트스트랩 실행 스레드(역사적 Amp low), 사용자 검토 대기
-- 관련: `docs/PRD.md` 10장, 14장 1단계, `docs/decisions/0002-role-routing.md`
+- 관련: `docs/PRD.md` 10장, 14장 1단계, `docs/decisions/0002-role-routing.md`,
+  `docs/decisions/0003-role-swap.md`
 
 ## 맥락
 
@@ -42,7 +43,7 @@ DB 선택도 확정하지 않았습니다.
 - 제품 내 AI 제공자·모델·비용 한도
 - 공개 배포 방식과 도메인
 
-이 항목들은 구현 전에 **독립 설계 리뷰(현재 T3 OpenCode; 역할 라우팅은 ADR-0002)**를 거치고,
+이 항목들은 구현 전에 **독립 설계 리뷰(현재 T3 Codex; 역할 라우팅은 ADR-0003)**를 거치고,
 결정되면 이 ADR을 대체하는 새 ADR을 남깁니다.
 
 ## 결과
@@ -56,5 +57,7 @@ DB 선택도 확정하지 않았습니다.
 ## 역할 이력
 
 최초 bootstrap은 Amp Code low 구현·medium 리뷰를 전제로 했다. 이후 사용자가 T3 native Codex 구현과
-OpenCode 리뷰로 전환했고, 현재 역할·모델 선택은 ADR-0002와 `docs/roles.md`에 기록했다. 기존 medium
-리뷰 결과는 `docs/PRD.md` 17장에 이력으로 보존하며, 이 ADR은 그 결과를 재검토 완료로 바꾸지 않는다.
+OpenCode 리뷰로 전환했고, 그다음 모델·effort를 유지한 채 OpenCode 구현·Codex 리뷰로 역할을
+교체했다. 현재 역할·모델 선택은 ADR-0003과 `docs/roles.md`에 기록했으며, ADR-0002는 교체 전 이력이다.
+기존 medium 리뷰 결과는 `docs/PRD.md` 17장에 이력으로 보존하며, 이 ADR은 그 결과를 재검토 완료로
+바꾸지 않는다.
